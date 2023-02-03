@@ -1,9 +1,12 @@
+import { StyleContextProvider } from "./Contexts/StyleContextProvider"
 
 
 function App() {
 
   return (
-    <h1>ola mundo</h1>
+    <StyleContextProvider>
+      <h1>header</h1>
+    </StyleContextProvider>
   )
 }
 
