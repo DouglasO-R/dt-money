@@ -1,3 +1,4 @@
+import { Header } from "./components/Header"
 import { StyleContextProvider } from "./Contexts/StyleContextProvider"
 
 
@@ -5,7 +6,7 @@ function App() {
 
   return (
     <StyleContextProvider>
-      <h1>header</h1>
+      <Header />
     </StyleContextProvider>
   )
 }
