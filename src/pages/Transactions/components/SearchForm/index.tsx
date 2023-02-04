@@ -12,7 +12,11 @@ const searchFormSchema = zod.object({
 
 type SearchFormInput = zod.infer<typeof searchFormSchema>
 
-export function SearchForm() {
+interface Props {
+  handleFilter: (data: string) => void
+}
+
+export function SearchForm({ handleFilter }: Props) {
   const { fetchTransactions } = useTransactions()
 
   const {
@@ -33,6 +37,9 @@ export function SearchForm() {
         type="text"
         placeholder="Busque por transações"
         {...register('query')}
+        onChange={(e) => {
+          handleFilter(e.target.value)
+        }}
       />
 
       <button type="submit" disabled={isSubmitting}>
