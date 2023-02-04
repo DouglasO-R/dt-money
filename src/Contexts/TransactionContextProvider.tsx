@@ -10,9 +10,17 @@ export interface Transaction {
     createdAt: string;
 }
 
+interface TransactionRequest {
+    description: string,
+    price: number,
+    category: string,
+    type: 'income' | 'outcome',
+}
+
 interface TransactionContextType {
     transactions: Transaction[];
-    fetchTransactions: (query?: string) => Promise<void>
+    fetchTransactions: (query?: string) => Promise<void>;
+    createTransactions: (data: TransactionRequest) => Promise<void>
 }
 
 export const TransactionContext = createContext<TransactionContextType>({} as TransactionContextType);
@@ -21,7 +29,6 @@ interface TransactionContextProviderProps {
     children: React.ReactNode
 }
 
-
 export function TransactionContextProvider({ children }: TransactionContextProviderProps) {
     const [transactions, setTransaction] = useState<Transaction[]>([]);
 
@@ -29,6 +36,8 @@ export function TransactionContextProvider({ children }: TransactionContextProvi
     const fetchTransactions = async (query?: string) => {
         const response = await api.get('/transactions', {
             params: {
+                _sort: "createdAt",
+                _order: "desc",
                 q: query
             }
         });
@@ -36,6 +45,19 @@ export function TransactionContextProvider({ children }: TransactionContextProvi
 
 
         setTransaction(response.data);
+    }
+
+    const createTransactions = async (data: TransactionRequest) => {
+        const { description, category, price, type } = data;
+        const response = await api.post("transactions", {
+            description,
+            category,
+            price,
+            type,
+            createdAt: new Date(),
+        });
+
+        setTransaction(prev => [response.data, ...prev])
     }
 
     useEffect(() => {
@@ -46,7 +68,8 @@ export function TransactionContextProvider({ children }: TransactionContextProvi
         <TransactionContext.Provider
             value={{
                 transactions,
-                fetchTransactions
+                fetchTransactions,
+                createTransactions
             }}
         >
             {children}

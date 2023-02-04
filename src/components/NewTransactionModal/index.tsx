@@ -5,6 +5,8 @@ import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
 import { CloseButton, Content, Overlay, TransactionType, TransactionTypeButton } from "./style";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "../../lib/axios";
+import { useTransactions } from "../../hooks/useTransactions";
 
 
 
@@ -18,17 +20,22 @@ const newTransactionFormSchema = zod.object({
 type NewTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>;
 
 export function NewTransactionModal() {
+    const { createTransactions } = useTransactions();
+
     const {
         register,
         handleSubmit,
         control,
-        formState: { isSubmitting }
+        formState: { isSubmitting },
+        reset
     } = useForm<NewTransactionFormInputs>({
         resolver: zodResolver(newTransactionFormSchema)
     });
 
-    const handleCreateNewTransaction = (data: NewTransactionFormInputs) => {
-        console.log(data)
+    const handleCreateNewTransaction = async (data: NewTransactionFormInputs) => {
+
+        await createTransactions(data);
+        reset();
     }
 
 
