@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { Transaction, TransactionContext } from "../Contexts/TransactionContextProvider";
+import { TransactionContext } from "../Contexts/TransactionContextProvider";
 
-export function useTransactions(): Transaction[] {
-    const { transactions } = useContext(TransactionContext);
-    return transactions;
+export function useTransactions() {
+    const { transactions, fetchTransactions } = useContext(TransactionContext);
+    return { transactions, fetchTransactions };
 }
