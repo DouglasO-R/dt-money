@@ -1,27 +1,30 @@
+import { Transaction } from "../../Contexts/TransactionContextProvider";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
 
-export function TransactionList() {
+interface TransactionListProps {
+    transactions: Transaction[]
+}
+
+export function TransactionList({ transactions }: TransactionListProps) {
+
+    const renderTransaction = (transaction: Transaction) => (
+        <tr key={transaction.id}>
+            <td width="50%">{transaction.description}</td>
+            <td>
+                <PriceHighlight variant={transaction.type}>{transaction.price}</PriceHighlight>
+            </td>
+            <td>{transaction.category}</td>
+            <td>{transaction.createdAt}</td>
+        </tr>
+    )
+
+
     return (
         <TransactionsContainer>
             <TransactionsTable>
                 <tbody>
-                    <tr>
-                        <td width="50%">Salario</td>
-                        <td>
-                            <PriceHighlight variant="income">R$1200,00</PriceHighlight>
-                        </td>
-                        <td>Remuneração</td>
-                        <td>15/01/2023</td>
-                    </tr>
+                    {transactions?.map(renderTransaction)}
 
-                    <tr>
-                        <td width="50%">Gasto</td>
-                        <td>
-                            <PriceHighlight variant="outcome">- R$1000,00</PriceHighlight>
-                        </td>
-                        <td>Conta</td>
-                        <td>15/01/2023</td>
-                    </tr>
                 </tbody>
             </TransactionsTable>
         </TransactionsContainer>
