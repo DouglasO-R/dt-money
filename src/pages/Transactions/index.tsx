@@ -12,7 +12,7 @@ export function Transactions() {
     return (
         <>
             <Header />
-            <Summary />
+            <Summary transactions={transactions} />
             <SearchForm />
             <TransactionList transactions={transactions} />
         </>
