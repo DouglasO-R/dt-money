@@ -28,7 +28,7 @@ export function SearchForm({ handleFilter }: Props) {
   })
 
   const handleSearchTransactions = async (data: SearchFormInput) => {
-    await fetchTransactions(data.query)
+    await fetchTransactions(data.query.charAt(0).toUpperCase())
   }
 
   return (

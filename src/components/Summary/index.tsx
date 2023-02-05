@@ -1,4 +1,5 @@
 import { ArrowCircleDown, ArrowCircleUp, CurrencyDollar } from 'phosphor-react'
+import { useMemo } from 'react'
 import { Transaction } from '../../Contexts/TransactionContextProvider'
 import { priceFormatter } from '../../utils/formatter'
 import { SummaryCard, SummaryContainer } from './style'
@@ -8,23 +9,25 @@ interface SummaryProps {
 }
 
 export function Summary({ transactions }: SummaryProps) {
-  const summary = transactions.reduce(
-    (acc, transaction) => {
-      if (transaction.type === 'income') {
-        acc.income += transaction.price
-        acc.total += transaction.price
-      } else {
-        acc.outcome += transaction.price
-        acc.total -= transaction.price
-      }
-      return acc
-    },
-    {
-      income: 0,
-      outcome: 0,
-      total: 0,
-    },
-  )
+  const summary = useMemo(() => {
+    return transactions.reduce(
+      (acc, transaction) => {
+        if (transaction.type === 'income') {
+          acc.income += transaction.price
+          acc.total += transaction.price
+        } else {
+          acc.outcome += transaction.price
+          acc.total -= transaction.price
+        }
+        return acc
+      },
+      {
+        income: 0,
+        outcome: 0,
+        total: 0,
+      },
+    )
+  }, [transactions])
 
   return (
     <SummaryContainer>
